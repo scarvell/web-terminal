@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/jquery.terminal.css">
+	</head>
+	<body>
+	<div id="output">
+
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script src="js/jquery.terminal-0.4.14.min.js"></script>
+	<script src="js/jquery.mousewheel-min.js"></script>
+	<script>
+		jQuery(document).ready(function($){
+			var socket = io.connect('http://localhost');
+			function shellFunc(command, term) {
+				socket.emit('stdin', {data:command});
+			}
+
+			var termvar = $(document.body).terminal(shellFunc, {prompt: '$ ', greetings: false});
+
+			socket.on('stdout', function (data) {
+			  	console.log(data.data);
+				termvar.echo(data.data);
+			});
+		});
+	</script>
+	</body>
+</html>
